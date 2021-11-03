@@ -46,9 +46,12 @@ public class BallPhysics : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Brick"))
         {
-            Instantiate(explosion, collision.transform.position, collision.transform.rotation);
-            Destroy(explosion, 2.5f);
-            Destroy(collision.gameObject);
+            collision.gameObject.GetComponent<BrickHealth>().TakeDamage();
+            if (collision.gameObject.GetComponent<BrickHealth>().GetHealth() < 1)
+            {
+                GameObject exp = Instantiate(explosion, collision.transform.position, collision.transform.rotation);
+                Destroy(exp, 2.5f);
+            }
         }
     }
 }

@@ -9,12 +9,23 @@ public class GameManager : MonoBehaviour
     public Transform ballSpawnpoint;
     [SerializeField]
     private List<GameObject> activeBalls;
+    [SerializeField]
+    private List<GameObject> activeBricks;
+    public GameObject[] lives;
+    public int baseLives;
+    private int livesLeft;
+    public Canvas gameOverCanvas;
     // Start is called before the first frame update
     void Start()
     {
         if (instance != null)
         {
             Destroy(this);
+        }
+        livesLeft = baseLives;
+        foreach (GameObject brick in GameObject.FindGameObjectsWithTag("Brick"))
+        {
+            activeBricks.Add(brick);
         }
         SpawnBall();
     }
@@ -39,12 +50,50 @@ public class GameManager : MonoBehaviour
         activeBalls.Remove(ball);
         if (activeBalls.Count < 1)
         {
-            EndGame();
+            LoseLife();
         }
     }
 
-    public void EndGame()
+    public void BrickDestroyed(GameObject brick)
     {
+        activeBricks.Remove(brick);
+        if (activeBricks.Count < 1)
+        {
+            EndGame(true);
+        }
+    }
+
+    private void LoseLife()
+    {
+        livesLeft--;
+        UpdateLives();
+        if (livesLeft == 0)
+        {
+            EndGame(false);
+        }
+    }
+
+    private void GainLife()
+    {
+        if (livesLeft < baseLives)
+        {
+            livesLeft++;
+            UpdateLives();
+        }
+    }
+
+    private void UpdateLives()
+    {
+        for (int i = 0; i < lives.Length; i++)
+        {
+            if (livesLeft > i) { lives[i].gameObject.SetActive(true); }
+            else { lives[i].gameObject.SetActive(false); }
+        }
+    }
+
+    public void EndGame(bool win)
+    {
+        gameOverCanvas.gameObject.SetActive(true);
         Debug.Log("GAME OVER");
     }
 }
