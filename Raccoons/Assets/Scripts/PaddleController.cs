@@ -7,10 +7,11 @@ public class PaddleController : MonoBehaviour
     public float speed;
     public float rightScreenEdge;
     public float leftScreenEdge;
+    //private Transform start;
     // Start is called before the first frame update
     void Start()
     {
-        
+        //start = transform;
     }
 
     // Update is called once per frame
@@ -27,5 +28,10 @@ public class PaddleController : MonoBehaviour
         {
             transform.position = new Vector2(rightScreenEdge, transform.position.y);
         }
+    }
+
+    public void Reset()
+    {
+        transform.localPosition = new Vector3(0f, transform.position.y, transform.position.z);
     }
 }

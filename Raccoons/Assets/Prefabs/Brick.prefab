@@ -122,3 +122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad05c2240c83744389ceebdb0d2201b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseHealth: 1
+  colors:
+  - {r: 0.9433962, g: 0.52954787, b: 0.82077456, a: 0.6862745}
+  - {r: 1, g: 0.7156563, b: 0.4292453, a: 0.6862745}
+  - {r: 0.3037113, g: 0.990566, b: 0.7912991, a: 0.6862745}

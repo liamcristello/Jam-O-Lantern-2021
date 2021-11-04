@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class GameManager : MonoBehaviour
     public int baseLives;
     private int livesLeft;
     public Canvas gameOverCanvas;
+    public GameObject[] victoryElements;
+    public GameObject[] defeatElements;
+    public GameObject readyText;
+    public GameObject paddle;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,16 +32,7 @@ public class GameManager : MonoBehaviour
         {
             activeBricks.Add(brick);
         }
-        SpawnBall();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SpawnBall();
-        }
+        StartCoroutine(SetUpBall(false));
     }
 
     public void SpawnBall()
@@ -70,7 +66,27 @@ public class GameManager : MonoBehaviour
         if (livesLeft == 0)
         {
             EndGame(false);
+            paddle.SetActive(false);
         }
+        else
+        {
+            StartCoroutine(SetUpBall(true));
+        }
+    }
+
+    IEnumerator SetUpBall(bool lostlife)
+    {
+        paddle.GetComponent<PaddleController>().Reset();
+        paddle.SetActive(false);
+        if (lostlife)
+        {
+            yield return new WaitForSeconds(2.5f);
+        }
+        readyText.SetActive(true);
+        paddle.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        readyText.SetActive(false);
+        SpawnBall();
     }
 
     private void GainLife()
@@ -94,6 +110,30 @@ public class GameManager : MonoBehaviour
     public void EndGame(bool win)
     {
         gameOverCanvas.gameObject.SetActive(true);
+        if (win)
+        {
+            foreach (GameObject obj in victoryElements)
+            {
+                obj.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach (GameObject obj in defeatElements)
+            {
+                obj.SetActive(true);
+            }
+        }
         Debug.Log("GAME OVER");
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
