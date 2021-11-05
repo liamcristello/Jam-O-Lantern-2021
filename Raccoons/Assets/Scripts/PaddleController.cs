@@ -42,7 +42,7 @@ public class PaddleController : MonoBehaviour
     {
         Debug.Log("Resetting");
         cloth.sprite = clothDown;
-        transform.localPosition = new Vector3(0f, transform.position.y, transform.position.z);
+        transform.localPosition = new Vector3(-0.18f, transform.position.y, transform.position.z);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
