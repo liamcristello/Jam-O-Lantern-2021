@@ -29,7 +29,8 @@ public class BallPhysics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //rb.velocity = new Vector2(Mathf.Abs(rb.velocity.x + 0.003f) * Mathf.Sign(rb.velocity.x),
+        //    Mathf.Abs(rb.velocity.y + 0.003f) * Mathf.Sign(rb.velocity.y));
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

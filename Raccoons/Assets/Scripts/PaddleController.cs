@@ -7,6 +7,9 @@ public class PaddleController : MonoBehaviour
     public float speed;
     public float rightScreenEdge;
     public float leftScreenEdge;
+    public SpriteRenderer cloth;
+    public Sprite clothUp;
+    public Sprite clothDown;
     //private Transform start;
     // Start is called before the first frame update
     void Start()
@@ -32,6 +35,23 @@ public class PaddleController : MonoBehaviour
 
     public void Reset()
     {
+        Debug.Log("Resetting");
+        cloth.sprite = clothDown;
         transform.localPosition = new Vector3(0f, transform.position.y, transform.position.z);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+            StartCoroutine(ClothAnim());
+        }
+    }
+
+    private IEnumerator ClothAnim()
+    {
+        cloth.sprite = clothUp;
+        yield return new WaitForSeconds(0.2f);
+        cloth.sprite = clothDown;
     }
 }
