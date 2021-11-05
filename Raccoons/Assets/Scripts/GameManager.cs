@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour
     public GameObject[] defeatElements;
     public GameObject readyText;
     public GameObject paddle;
+    private AudioSource audioSource;
+    public AudioClip missClip;
+    public AudioClip victoryJingle;
+    public AudioClip defeatJingle;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +31,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
+        audioSource = gameObject.GetComponent<AudioSource>();
         livesLeft = baseLives;
         foreach (GameObject brick in GameObject.FindGameObjectsWithTag("Brick"))
         {
@@ -46,6 +51,7 @@ public class GameManager : MonoBehaviour
         activeBalls.Remove(ball);
         if (activeBalls.Count < 1)
         {
+            audioSource.PlayOneShot(missClip);
             LoseLife();
         }
     }
@@ -55,7 +61,7 @@ public class GameManager : MonoBehaviour
         activeBricks.Remove(brick);
         if (activeBricks.Count < 1)
         {
-            EndGame(true);
+            StartCoroutine(EndGame(true));
         }
     }
 
@@ -65,8 +71,7 @@ public class GameManager : MonoBehaviour
         UpdateLives();
         if (livesLeft == 0)
         {
-            EndGame(false);
-            paddle.SetActive(false);
+            StartCoroutine(EndGame(false));
         }
         else
         {
@@ -78,6 +83,7 @@ public class GameManager : MonoBehaviour
     {
         paddle.GetComponent<PaddleController>().Reset();
         paddle.SetActive(false);
+        paddle.GetComponent<PaddleController>().canControl = false;
         if (lostlife)
         {
             yield return new WaitForSeconds(2.5f);
@@ -86,6 +92,7 @@ public class GameManager : MonoBehaviour
         paddle.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         readyText.SetActive(false);
+        paddle.GetComponent<PaddleController>().canControl = true;
         SpawnBall();
     }
 
@@ -107,8 +114,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void EndGame(bool win)
+    public IEnumerator EndGame(bool win)
     {
+        paddle.GetComponent<PaddleController>().canControl = false;
+        yield return new WaitForSeconds(0.5f);
+        paddle.SetActive(false);
+        foreach (GameObject ball in activeBalls)
+        {
+            Destroy(ball);
+        }
+        paddle.SetActive(false);
         gameOverCanvas.gameObject.SetActive(true);
         if (win)
         {
@@ -116,6 +131,7 @@ public class GameManager : MonoBehaviour
             {
                 obj.SetActive(true);
             }
+            audioSource.clip = victoryJingle;
         }
         else
         {
@@ -123,7 +139,9 @@ public class GameManager : MonoBehaviour
             {
                 obj.SetActive(true);
             }
+            audioSource.clip = defeatJingle;
         }
+        audioSource.PlayOneShot(audioSource.clip);
         Debug.Log("GAME OVER");
     }
 

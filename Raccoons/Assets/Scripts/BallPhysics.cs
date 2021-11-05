@@ -16,6 +16,10 @@ public class BallPhysics : MonoBehaviour
     //UnityEvent OutOfBounds;
     private Rigidbody2D rb;
     public GameObject explosion;
+    public AudioClip[] bounceClips;
+    public AudioClip[] brickBreakClips;
+    public AudioClip[] brickShatterClips;
+    private AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +28,7 @@ public class BallPhysics : MonoBehaviour
         rb.AddForce(Vector2.right * (Random.Range(X_MIN, X_MAX) * (Random.Range(0, 2) * 2 - 1)));
         //OutOfBounds = new UnityEvent();
         //OutOfBounds.AddListener(GameManager.CallTest);
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -50,9 +55,19 @@ public class BallPhysics : MonoBehaviour
             collision.gameObject.GetComponent<BrickHealth>().TakeDamage();
             if (collision.gameObject.GetComponent<BrickHealth>().GetHealth() < 1)
             {
+                audioSource.clip = brickShatterClips[Random.Range(0, brickShatterClips.Length)];
                 GameObject exp = Instantiate(explosion, collision.transform.position, collision.transform.rotation);
                 Destroy(exp, 2.5f);
             }
+            else
+            {
+                audioSource.clip = brickBreakClips[Random.Range(0, brickBreakClips.Length)];
+            }
         }
+        else
+        {
+            audioSource.clip = bounceClips[Random.Range(0, bounceClips.Length)];
+        }
+        audioSource.PlayOneShot(audioSource.clip);
     }
 }

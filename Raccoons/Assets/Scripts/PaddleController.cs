@@ -10,16 +10,21 @@ public class PaddleController : MonoBehaviour
     public SpriteRenderer cloth;
     public Sprite clothUp;
     public Sprite clothDown;
+    private AudioSource audioSource;
+    public bool canControl;
     //private Transform start;
     // Start is called before the first frame update
     void Start()
     {
         //start = transform;
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!canControl) return;
+
         float horizontal = Input.GetAxis("Horizontal");
 
         transform.Translate(Vector2.right * horizontal * Time.deltaTime * speed);
@@ -45,6 +50,7 @@ public class PaddleController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ball"))
         {
             StartCoroutine(ClothAnim());
+            audioSource.PlayOneShot(audioSource.clip);
         }
     }
 
