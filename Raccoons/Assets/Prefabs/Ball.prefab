@@ -145,10 +145,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11fd4f7600d68484f9445183cf65909c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  X_MIN: 100
+  X_MIN: 50
   X_MAX: 300
-  Y_MIN: 100
-  Y_MAX: 300
+  Y_MIN: 250
+  Y_MAX: 350
   explosion: {fileID: 2671919910240717418, guid: a3f2a56fd8bd9184e80cd791f7fc0b97, type: 3}
   bounceClips:
   - {fileID: 8300000, guid: b128da4549f81e845ad3607c76223f50, type: 3}
@@ -173,7 +173,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0

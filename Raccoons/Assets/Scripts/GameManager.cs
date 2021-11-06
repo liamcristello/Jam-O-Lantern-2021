@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public AudioClip missClip;
     public AudioClip victoryJingle;
     public AudioClip defeatJingle;
+    public GameObject music;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +40,11 @@ public class GameManager : MonoBehaviour
         }
         StartCoroutine(SetUpBall(false));
     }
+
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Space)) { SpawnBall(); }
+    //}
 
     public void SpawnBall()
     {
@@ -92,6 +98,7 @@ public class GameManager : MonoBehaviour
         paddle.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         readyText.SetActive(false);
+        if (music.activeInHierarchy == false) { music.SetActive(true); }
         paddle.GetComponent<PaddleController>().canControl = true;
         SpawnBall();
     }
@@ -116,13 +123,14 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator EndGame(bool win)
     {
-        paddle.GetComponent<PaddleController>().canControl = false;
-        yield return new WaitForSeconds(0.5f);
-        paddle.SetActive(false);
+        if (music.activeInHierarchy == true) { music.SetActive(false); }
         foreach (GameObject ball in activeBalls)
         {
             Destroy(ball);
         }
+        paddle.GetComponent<PaddleController>().canControl = false;
+        yield return new WaitForSeconds(0.5f);
+        paddle.SetActive(false);
         paddle.SetActive(false);
         gameOverCanvas.gameObject.SetActive(true);
         if (win)
